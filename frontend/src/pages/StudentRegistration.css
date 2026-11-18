@@ -94,10 +94,20 @@
   border: 1px solid transparent;
 }
 
-.sr-success {
+.sr-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: max-content;
+  max-width: min(420px, calc(100vw - 48px));
+  padding: 14px 18px;
+  border: 1px solid #b7e0c8;
+  border-radius: 12px;
   background: #e8f6ee;
-  border-color: #b7e0c8;
   color: #17603a;
+  box-shadow: 0 12px 32px rgba(12, 35, 64, 0.18);
+  font-weight: 600;
 }
 
 .sr-error {
@@ -278,6 +288,14 @@
 }
 
 @media (max-width: 640px) {
+  .sr-toast {
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+
   .sr-page {
     padding: 0;
     align-items: stretch;

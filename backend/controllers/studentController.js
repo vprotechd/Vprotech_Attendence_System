@@ -34,6 +34,15 @@ export const registerStudent = async (req, res) => {
       });
     }
 
+    const normalizedPhone =
+      typeof phone === "string" ? phone.trim() : "";
+
+    if (!/^[0-9]{10}$/.test(normalizedPhone)) {
+      return res.status(400).json({
+        message: "Phone number must contain exactly 10 digits"
+      });
+    }
+
     if (password !== confirmPassword) {
       return res.status(400).json({
         message: "Passwords do not match"
@@ -74,7 +83,7 @@ export const registerStudent = async (req, res) => {
     const student = await Student.create({
       name: name.trim(),
       email: normalizedEmail,
-      phone: phone.trim(),
+      phone: normalizedPhone,
       collegeName: collegeName.trim(),
       semester,
       batch: batch.trim(),

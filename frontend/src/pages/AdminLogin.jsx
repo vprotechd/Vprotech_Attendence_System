@@ -101,6 +101,13 @@ const AdminLogin = () => {
             <button type="submit" className="sr-submit" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>
+            <button
+              type="button"
+              className="al-back-btn"
+              onClick={() => navigate("/")}
+            >
+              Back to student registration
+            </button>
           </form>
         </main>
       </div>

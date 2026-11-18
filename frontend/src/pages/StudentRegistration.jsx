@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../services/api";
 import banner from "../assets/vprotech-seo-banner.png";
 import "./StudentRegistration.css";
@@ -18,23 +18,37 @@ const initialForm = {
 
 const StudentRegistration = () => {
   const [formData, setFormData] = useState(initialForm);
-  const [message, setMessage] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!toastMessage) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setToastMessage("");
+    }, 4000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [toastMessage]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const nextValue =
+      name === "phone" ? value.replace(/\D/g, "").slice(0, 10) : value;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: nextValue
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setMessage("");
+    setToastMessage("");
     setError("");
 
     if (formData.password !== formData.confirmPassword) {
@@ -45,9 +59,9 @@ const StudentRegistration = () => {
     try {
       setLoading(true);
 
-      const response = await API.post("/students/register", formData);
+      await API.post("/students/register", formData);
 
-      setMessage(response.data.message);
+      setToastMessage("Your attendance has been successfully recorded.");
       setFormData(initialForm);
     } catch (err) {
       setError(
@@ -77,7 +91,6 @@ const StudentRegistration = () => {
           </header>
 
           <div aria-live="polite">
-            {message && <p className="sr-alert sr-success">{message}</p>}
             {error && <p className="sr-alert sr-error">{error}</p>}
           </div>
 
@@ -121,6 +134,10 @@ const StudentRegistration = () => {
                   type="tel"
                   name="phone"
                   placeholder="10-digit mobile number"
+                  inputMode="numeric"
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                  title="Enter exactly 10 digits."
                   value={formData.phone}
                   onChange={handleChange}
                   autoComplete="tel"
@@ -255,6 +272,11 @@ const StudentRegistration = () => {
           </form>
         </main>
       </div>
+      {toastMessage && (
+        <div className="sr-toast" role="status">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 };

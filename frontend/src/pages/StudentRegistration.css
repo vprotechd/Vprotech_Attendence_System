@@ -1,0 +1,353 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap");
+
+.sr-page {
+  --navy: #0c2340;
+  --navy-deep: #081a31;
+  --blue: #2457d6;
+  --blue-hover: #1b45b0;
+  --ink: #17233a;
+  --muted: #5d6b82;
+  --line: #d9e0ec;
+  --surface: #ffffff;
+  --bg: #eef2f8;
+
+  text-align: left;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 32px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fdeee4 0%, #fbf4ec 45%, #e8effb 100%);
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: var(--ink);
+  box-sizing: border-box;
+}
+
+.sr-page *,
+.sr-page *::before,
+.sr-page *::after {
+  box-sizing: border-box;
+}
+
+.sr-card {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid #c9d8f2;
+  box-shadow: 0 24px 60px rgba(12, 35, 64, 0.12);
+}
+
+/* ---------- Form panel ---------- */
+.sr-form-panel {
+  padding: 48px 52px;
+}
+
+.sr-header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sr-page .sr-logo {
+  flex-shrink: 0;
+  display: block;
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.sr-header-text {
+  min-width: 0;
+}
+
+.sr-page .sr-header h1 {
+  text-align: left;
+  margin: 0 0 6px;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+
+.sr-page .sr-header p {
+  text-align: left;
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.sr-alert {
+  margin: 0 0 20px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+}
+
+.sr-success {
+  background: #e8f6ee;
+  border-color: #b7e0c8;
+  color: #17603a;
+}
+
+.sr-error {
+  background: #fdecec;
+  border-color: #f3bcbc;
+  color: #a52222;
+}
+
+.sr-form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.sr-section {
+  margin: 0;
+  padding: 22px 0 0;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+
+.sr-page .sr-section-title {
+  margin: 0 0 14px;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--navy);
+  text-align: left;
+}
+
+.sr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.sr-span-2 {
+  grid-column: 1 / -1;
+}
+
+.sr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sr-page .sr-field label {
+  text-align: left;
+}
+
+.sr-field label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.sr-field input {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: #f8fafd;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.sr-field input::placeholder {
+  color: #9aa6b9;
+}
+
+.sr-field input:hover {
+  border-color: #b8c4d8;
+}
+
+.sr-field input:focus {
+  outline: none;
+  background: #fff;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(36, 87, 214, 0.18);
+}
+
+/* ---------- Attendance segmented control ---------- */
+.sr-segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  background: #f1f4f9;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.sr-seg-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sr-seg-option input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.sr-seg-option:focus-within {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+.sr-seg-option.is-active {
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(12, 35, 64, 0.15);
+}
+
+.sr-seg-option.is-present {
+  color: #17603a;
+}
+
+.sr-seg-option.is-absent {
+  color: #a52222;
+}
+
+/* ---------- Submit ---------- */
+.sr-submit {
+  height: 50px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--navy);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.sr-submit:hover:not(:disabled) {
+  background: var(--blue);
+}
+
+.sr-submit:focus-visible {
+  outline: 3px solid rgba(36, 87, 214, 0.4);
+  outline-offset: 2px;
+}
+
+.sr-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .sr-page {
+    padding: 24px 16px;
+  }
+
+  .sr-page .sr-logo {
+    width: 100px;
+  }
+
+  .sr-form-panel {
+    padding: 36px 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sr-page {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .sr-card {
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .sr-form-panel {
+    padding: 24px 18px calc(32px + env(safe-area-inset-bottom));
+  }
+
+  /* logo moves above the heading, stays small */
+  .sr-header {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .sr-page .sr-logo {
+    width: 96px;
+  }
+
+  .sr-page .sr-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .sr-page .sr-header p {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  .sr-form {
+    gap: 22px;
+  }
+
+  .sr-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* 16px inputs stop iOS from zooming on focus; taller tap targets */
+  .sr-field input {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .sr-seg-option {
+    height: 48px;
+  }
+
+  .sr-submit {
+    height: 54px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .sr-form-panel {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-page * {
+    transition: none !important;
+  }
+}

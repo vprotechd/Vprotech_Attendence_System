@@ -1,0 +1,15 @@
+/* Admin login: narrower card, single-column fields.
+   Everything else comes from StudentRegistration.css */
+.sr-page .sr-card.sr-card--narrow {
+  max-width: 440px;
+}
+
+.sr-page .sr-grid.al-single {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 640px) {
+  .sr-page .sr-card.sr-card--narrow {
+    max-width: none;
+  }
+}

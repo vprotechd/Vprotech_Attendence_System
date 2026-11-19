@@ -4,6 +4,7 @@ import express from "express";
 import {
   loginAdmin,
   getAllStudents,
+  deleteStudent,
   getAttendanceDashboard,
   getAttendanceRecords,
   exportAttendance
@@ -26,6 +27,7 @@ router.get("/dashboard", authMiddleware, (req, res) => {
 
 // Get all registered students
 router.get("/students", authMiddleware, getAllStudents);
+router.delete("/students/:studentId", authMiddleware, deleteStudent);
 
 // Get attendance dashboard summary
 router.get(

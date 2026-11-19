@@ -26,6 +26,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [attendanceLoading, setAttendanceLoading] = useState(true);
   const [exportLoading, setExportLoading] = useState(false);
+  const [deletingStudentId, setDeletingStudentId] = useState("");
   const [error, setError] = useState("");
 
   // JWT token
@@ -178,6 +179,7 @@ const AdminDashboard = () => {
         headers: {
           Authorization: `Bearer ${token}`
         },
+        params: dateFilter ? { date: dateFilter } : {},
         responseType: "blob"
       });
 
@@ -189,17 +191,74 @@ const AdminDashboard = () => {
       const link = document.createElement("a");
 
       link.href = url;
-      link.download = "attendance-records.csv";
+      link.download = dateFilter
+        ? `attendance-records-${dateFilter}.csv`
+        : "attendance-records.csv";
 
       document.body.appendChild(link);
       link.click();
       link.remove();
 
       window.URL.revokeObjectURL(url);
-    } catch {
-      setError("Unable to export attendance records.");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Unable to export attendance records."
+      );
     } finally {
       setExportLoading(false);
+    }
+  };
+
+  const handleDeleteStudent = async (student) => {
+    const confirmed = window.confirm(
+      `Delete ${student.name} and all of their attendance records? This cannot be undone.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setDeletingStudentId(student._id);
+      setError("");
+
+      const response = await API.delete(`/admin/students/${student._id}`);
+      const deletedAttendance = response.data.deletedAttendance;
+
+      setStudents((currentStudents) =>
+        currentStudents.filter((currentStudent) => currentStudent._id !== student._id)
+      );
+      setAttendance((currentAttendance) =>
+        currentAttendance.filter(
+          (record) =>
+            record.student?._id !== student._id &&
+            record.rollNumber !== student.rollNumber
+        )
+      );
+      setSummary((currentSummary) => ({
+        totalRecords: Math.max(
+          0,
+          currentSummary.totalRecords - deletedAttendance.total
+        ),
+        presentCount: Math.max(
+          0,
+          currentSummary.presentCount - deletedAttendance.present
+        ),
+        absentCount: Math.max(
+          0,
+          currentSummary.absentCount - deletedAttendance.absent
+        )
+      }));
+    } catch (err) {
+      if ([401, 403].includes(err.response?.status)) {
+        localStorage.removeItem("adminToken");
+        navigate("/admin/login");
+        return;
+      }
+
+      setError(err.response?.data?.message || "Unable to delete student.");
+    } finally {
+      setDeletingStudentId("");
     }
   };
 
@@ -297,6 +356,7 @@ const AdminDashboard = () => {
                   <th>College</th>
                   <th>Semester</th>
                   <th>Batch</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
 
@@ -311,11 +371,24 @@ const AdminDashboard = () => {
                       <td>{student.collegeName}</td>
                       <td>{student.semester}</td>
                       <td>{student.batch}</td>
+                      <td>
+                        <button
+                          className="delete-btn"
+                          type="button"
+                          onClick={() => handleDeleteStudent(student)}
+                          disabled={deletingStudentId === student._id}
+                          aria-label={`Delete ${student.name}`}
+                        >
+                          {deletingStudentId === student._id
+                            ? "Deleting..."
+                            : "Delete"}
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="empty-message">
+                    <td colSpan="8" className="empty-message">
                       No students found.
                     </td>
                   </tr>
@@ -338,7 +411,11 @@ const AdminDashboard = () => {
               onClick={handleExport}
               disabled={exportLoading}
             >
-              {exportLoading ? "Exporting..." : "Export CSV"}
+              {exportLoading
+                ? "Exporting..."
+                : dateFilter
+                  ? `Export ${dateFilter} CSV`
+                  : "Export CSV"}
             </button>
           </div>
 

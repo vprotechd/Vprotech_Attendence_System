@@ -137,6 +137,20 @@
   border-color: var(--blue);
 }
 
+.ad-page .delete-btn {
+  height: 36px;
+  padding: 0 12px;
+  color: var(--red);
+  background: #fff;
+  border: 1px solid #e8baba;
+}
+
+.ad-page .delete-btn:hover:not(:disabled) {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+
 /* ---------- Error ---------- */
 .ad-page .dashboard-error {
   padding: 12px 16px;

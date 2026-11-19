@@ -202,34 +202,14 @@ const StudentRegistration = () => {
             </div>
             </section>
 
-            <section className="sr-section">
+            {/* <section className="sr-section">
               <h3 className="sr-section-title">Today's attendance</h3>
 
               <div className="sr-grid">
 
-              <div className="sr-segmented sr-span-2" role="radiogroup">
-                {["Present", "Absent"].map((status) => (
-                  <label
-                    key={status}
-                    className={`sr-seg-option ${
-                      formData.attendanceStatus === status
-                        ? `is-active is-${status.toLowerCase()}`
-                        : ""
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="attendanceStatus"
-                      value={status}
-                      checked={formData.attendanceStatus === status}
-                      onChange={handleChange}
-                    />
-                    {status}
-                  </label>
-                ))}
-              </div>
+             <p className="sr-span-2">Present</p>
             </div>
-            </section>
+            </section> */}
 
             <section className="sr-section">
               <h3 className="sr-section-title">Account security</h3>

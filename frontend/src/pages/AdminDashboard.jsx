@@ -28,9 +28,22 @@ const AdminDashboard = () => {
   const [exportLoading, setExportLoading] = useState(false);
   const [deletingStudentId, setDeletingStudentId] = useState("");
   const [error, setError] = useState("");
+  const [toast, setToast] = useState(null);
 
   // JWT token
   const token = localStorage.getItem("adminToken");
+
+  useEffect(() => {
+    if (!toast || !["success", "error"].includes(toast.type)) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setToast(null);
+    }, 4000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [toast]);
 
   // Fetch students and dashboard summary
   useEffect(() => {
@@ -210,17 +223,10 @@ const AdminDashboard = () => {
   };
 
   const handleDeleteStudent = async (student) => {
-    const confirmed = window.confirm(
-      `Delete ${student.name} and all of their attendance records? This cannot be undone.`
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
     try {
       setDeletingStudentId(student._id);
       setError("");
+      setToast({ type: "loading", message: `Deleting ${student.name}...` });
 
       const response = await API.delete(`/admin/students/${student._id}`);
       const deletedAttendance = response.data.deletedAttendance;
@@ -249,6 +255,10 @@ const AdminDashboard = () => {
           currentSummary.absentCount - deletedAttendance.absent
         )
       }));
+      setToast({
+        type: "success",
+        message: `${student.name} and their attendance records were deleted.`
+      });
     } catch (err) {
       if ([401, 403].includes(err.response?.status)) {
         localStorage.removeItem("adminToken");
@@ -256,7 +266,10 @@ const AdminDashboard = () => {
         return;
       }
 
-      setError(err.response?.data?.message || "Unable to delete student.");
+      setToast({
+        type: "error",
+        message: err.response?.data?.message || "Unable to delete student."
+      });
     } finally {
       setDeletingStudentId("");
     }
@@ -302,6 +315,48 @@ const AdminDashboard = () => {
         {error && (
           <div className="dashboard-error" role="alert">
             {error}
+          </div>
+        )}
+
+        {toast && (
+          <div
+            className={`dashboard-toast dashboard-toast-${toast.type}`}
+            role={toast.type === "confirm" ? "group" : "status"}
+            aria-live={toast.type === "confirm" ? "assertive" : "polite"}
+          >
+            <span>
+              {toast.type === "confirm"
+                ? `Delete ${toast.student.name} and all of their attendance records? This cannot be undone.`
+                : toast.message}
+            </span>
+            {toast.type === "confirm" && (
+              <div className="dashboard-toast-actions">
+                <button
+                  type="button"
+                  className="toast-cancel-btn"
+                  onClick={() => setToast(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="toast-confirm-btn"
+                  onClick={() => handleDeleteStudent(toast.student)}
+                >
+                  Delete permanently
+                </button>
+              </div>
+            )}
+            {["success", "error"].includes(toast.type) && (
+              <button
+                type="button"
+                className="toast-dismiss-btn"
+                onClick={() => setToast(null)}
+                aria-label="Dismiss notification"
+              >
+                ×
+              </button>
+            )}
           </div>
         )}
 
@@ -375,8 +430,10 @@ const AdminDashboard = () => {
                         <button
                           className="delete-btn"
                           type="button"
-                          onClick={() => handleDeleteStudent(student)}
-                          disabled={deletingStudentId === student._id}
+                          onClick={() =>
+                            setToast({ type: "confirm", student })
+                          }
+                          disabled={Boolean(deletingStudentId)}
                           aria-label={`Delete ${student.name}`}
                         >
                           {deletingStudentId === student._id

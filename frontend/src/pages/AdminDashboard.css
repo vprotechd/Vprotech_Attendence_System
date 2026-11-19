@@ -151,6 +151,74 @@
   border-color: var(--red);
 }
 
+.ad-page .dashboard-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: max-content;
+  max-width: min(440px, calc(100vw - 48px));
+  padding: 14px 16px;
+  border: 1px solid #b7e0c8;
+  border-radius: 12px;
+  background: #e8f6ee;
+  color: var(--green);
+  box-shadow: 0 12px 32px rgba(12, 35, 64, 0.18);
+  font-weight: 600;
+}
+
+.ad-page .dashboard-toast-confirm,
+.ad-page .dashboard-toast-loading {
+  border-color: #e8baba;
+  background: #fff;
+  color: var(--ink);
+}
+
+.ad-page .dashboard-toast-error {
+  border-color: #f3bcbc;
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.ad-page .dashboard-toast-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.ad-page .dashboard-toast .toast-cancel-btn,
+.ad-page .dashboard-toast .toast-confirm-btn,
+.ad-page .dashboard-toast .toast-dismiss-btn {
+  height: 36px;
+  padding: 0 12px;
+}
+
+.ad-page .dashboard-toast .toast-cancel-btn {
+  color: var(--navy);
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.ad-page .dashboard-toast .toast-confirm-btn {
+  color: #fff;
+  background: var(--red);
+  border: 1px solid var(--red);
+}
+
+.ad-page .dashboard-toast .toast-dismiss-btn {
+  flex-shrink: 0;
+  padding: 0 8px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
 /* ---------- Error ---------- */
 .ad-page .dashboard-error {
   padding: 12px 16px;
@@ -368,6 +436,18 @@
 @media (max-width: 640px) {
   .ad-page {
     padding: 16px 12px 32px;
+  }
+
+  .ad-page .dashboard-toast {
+    top: 12px;
+    right: 12px;
+    max-width: calc(100vw - 24px);
+    flex-wrap: wrap;
+  }
+
+  .ad-page .dashboard-toast-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
 
   .ad-page .admin-dashboard {
